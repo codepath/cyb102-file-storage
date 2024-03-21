@@ -29,8 +29,11 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 # Installing unzip to ensure system won't crash
-apt install unzip -y
-echo "Unzip installed and latest version moving into install script\n"
+if ! dpkg -s unzip > /dev/null; then
+    echo "${red}[UNZIP]${none} Unzip not installed.  Installing now..."
+    apt install unzip -y
+    echo -e "${green}[UNZIP]${none} Unzip installed."
+fi
 
 CATALYST_INSTALL_PATH=/opt/catalyst
 mkdir -p $CATALYST_INSTALL_PATH
