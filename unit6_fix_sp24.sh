@@ -72,7 +72,7 @@ fi
 #### CATALYST LOCAL INSTALL: CATALYST
 CATALYST_INSTALLED=$(docker compose ls -q --filter name=catalyst-setup-sp24-main)
 if [ -n "$CATALYST_INSTALLED" ]; then
-	echo -e "${green}[CATALYST SETUP]${none} Catalyst is already running.  Try connecting at https://catalyst.localhost."
+	echo -e "${green}[CATALYST SETUP]${none} Catalyst is already running.  Try connecting at https://catalyst.localhost"
     echo -e "\nTo ${red}stop${none} it, use the following command:"
     echo -e "\n  ${bold}docker compose -f /opt/catalyst/catalyst-setup-sp24-main/docker-compose.yml down${none}\n"
     echo -e "To ${yellow}restart${none} it, use the following command:"
@@ -98,7 +98,7 @@ fi
 #### VERIFY
 CATALYST_INSTALLED=$(docker compose ls -q --filter name=catalyst-setup-sp24-main)
 if [ -n "$CATALYST_INSTALLED" ]; then
-    echo -e "${green}[CATALYST SETUP]${none} Catalyst is running.  Try connecting at https://catalyst.localhost."
+    echo -e "${green}[CATALYST SETUP]${none} Catalyst is running.  Try connecting at https://catalyst.localhost"
 else
     echo -e "${red}[CATALYST SETUP]${none} Catalyst is not running.  Please check the logs for errors."
 fi
