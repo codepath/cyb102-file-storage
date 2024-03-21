@@ -3,6 +3,7 @@ red='\033[0;31m'
 green='\033[0;32m'
 none='\033[0m'
 yellow='\033[1;33m'
+bold='\033[1m'
 
 ##########################################
 ############### REFERENCES ###############
@@ -69,17 +70,21 @@ else
 fi
 
 #### CATALYST LOCAL INSTALL: CATALYST
-CATALYST_INSTALLED=$(docker compose ls -q --filter name=catalyst-setup-sp24-main2)
+CATALYST_INSTALLED=$(docker compose ls -q --filter name=catalyst-setup-sp24-main)
 if [ -n "$CATALYST_INSTALLED" ]; then
-	echo -e "${green}[CATALYST SETUP]${none} Catalyst already running"
+	echo -e "${green}[CATALYST SETUP]${none} Catalyst is already running.  Try connecting at https://catalyst.localhost."
+    echo -e "\nTo ${red}stop${none} it, use the following command:"
+    echo -e "\n  ${bold}docker compose -f /opt/catalyst/catalyst-setup-sp24-main/docker-compose.yml down${none}\n"
+    echo -e "To ${yellow}restart${none} it, use the following command:"
+    echo -e "\n  ${bold}docker compose -f /opt/catalyst/catalyst-setup-sp24-main/docker-compose.yml up --detach${none}\n"
 else
     # verify that this is the first install to prevent arangodb root password issues
     if [ -n "$(docker volume ls -q --filter name=catalyst-setup-sp24-main_arangodb)" ]; then
-        echo "ERROR: Catalyst seems to already be installed.  To start/stop it, use the following commands:"
-        echo "TO ${green}START${none}:"
-        echo "  docker compose -f /opt/catalyst/catalyst-setup-sp24-main/docker-compose.yml up --detach"
-        echo "TO ${red}STOP${none}:"
-        echo "  docker compose -f /opt/catalyst/catalyst-setup-sp24-main/docker-compose.yml down"
+        echo "${yellow}[CATALYST SETUP]${none} Catalyst seems to already be installed, but is not currently running."
+        echo -e "\nTo ${green}start${none} it, use the following command:"
+        echo -e "\n  ${bold}docker compose -f /opt/catalyst/catalyst-setup-sp24-main/docker-compose.yml up --detach${none}\n"
+        echo -e "To ${red}stop${none} it, use the following command:"
+        echo -e "\n  ${bold}docker compose -f /opt/catalyst/catalyst-setup-sp24-main/docker-compose.yml down${none}\n"
         exit 1
     else
         echo -e "${yellow}[CATALYST SETUP]${none} INSTALLING CATALYST"
@@ -87,6 +92,14 @@ else
         openssl req -x509 -newkey rsa:4096 -sha256 -days 3650 -nodes -keyout example.key -out example.crt -subj "/CN=localhost"
         sudo bash install_catalyst.sh https://catalyst.localhost https://authelia.localhost $CATALYST_INSTALL_PATH/example.crt $CATALYST_INSTALL_PATH/example.key admin:admin:admin@example.com
     fi
+fi
+
+#### VERIFY
+CATALYST_INSTALLED=$(docker compose ls -q --filter name=catalyst-setup-sp24-main)
+if [ -n "$CATALYST_INSTALLED" ]; then
+    echo -e "${green}[CATALYST SETUP]${none} Catalyst is running.  Try connecting at https://catalyst.localhost."
+else
+    echo -e "${red}[CATALYST SETUP]${none} Catalyst is not running.  Please check the logs for errors."
 fi
 
 ### CLEANUP 
