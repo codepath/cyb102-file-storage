@@ -20,9 +20,13 @@ bold='\033[1m'
 ## Script developed by rollingcoconut and sarcb 
 ##########################################
 
-echo "THIS SCRIPT IS UNDER DEVELOPMENT. PLEASE DO NOT USE IT YET"
-
 echo "[UNIT 6 LAB/PROJECT SPRING 2024 FIX] Starting script..."
+
+# Check if the user is root
+if [ "$EUID" -ne 0 ]; then
+    echo -e "${red}[ERROR]${none} Please run using sudo."
+    exit 1
+fi
 
 CATALYST_INSTALL_PATH=/opt/catalyst
 mkdir -p $CATALYST_INSTALL_PATH
