@@ -28,6 +28,10 @@ if [ "$EUID" -ne 0 ]; then
     exit 1
 fi
 
+# Installing unzip to ensure system won't crash
+apt install unzip -y
+echo "Unzip installed and latest version moving into install script\n"
+
 CATALYST_INSTALL_PATH=/opt/catalyst
 mkdir -p $CATALYST_INSTALL_PATH
 pushd $CATALYST_INSTALL_PATH
