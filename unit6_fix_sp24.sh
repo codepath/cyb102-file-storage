@@ -56,6 +56,14 @@ else
 	sudo usermod -aG docker ${USER}
 fi
 
+#### Check if apache2 is running
+APACHE2_ACTIVE=$(systemctl is-active apache2)
+if [[ "$APACHE2_ACTIVE" == "active" ]]; then
+    echo -e "${yellow}[APACHE2]${none} DISABLING APACHE2"
+    sudo service apache2 stop
+    sudo systemctl disable apache2
+fi
+
 #### CATALYST LOCAL INSTALL: CATALYST
 CATALYST_INSTALLED=$(curl -k http://catalyst.localhost)
 if [[ "$CATALYST_INSTALLED" =~ "<html>" ]]; then
