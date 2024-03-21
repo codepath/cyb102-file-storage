@@ -15,6 +15,8 @@ yellow='\033[1;33m'
 ##
 ## DOCKER 
 ## 	https://github.com/fmidev/smartmet-server/blob/master/docs/Setting-up-Docker-and-Docker-Compose-(Ubuntu-16.04-and-18.04.1).md
+##
+## Script developed by rollingcoconut and sarcb 
 ##########################################
 
 echo "THIS SCRIPT IS UNDER DEVELOPMENT. PLEASE DO NOT USE IT YET"
@@ -23,7 +25,7 @@ echo "[UNIT 6 LAB/PROJECT SPRING 2024 FIX] Starting script..."
 
 CATALYST_INSTALL_PATH=/opt/catalyst
 mkdir -p $CATALYST_INSTALL_PATH
-pushd $CATALYST_SCRIPTS_PATH
+pushd $CATALYST_INSTALL_PATH
 
 #### CATALYST LOCAL INSTALL: UPDATE /ETC/HOSTS
 if ! grep -q "catalyst.localhost" /etc/hosts; then
@@ -62,26 +64,33 @@ if [[ "$APACHE2_ACTIVE" == "active" ]]; then
     echo -e "${yellow}[APACHE2]${none} DISABLING APACHE2"
     sudo service apache2 stop
     sudo systemctl disable apache2
+else
+    echo -e "${green}[APACHE2]${none} Apache2 is already disabled."
 fi
 
 #### CATALYST LOCAL INSTALL: CATALYST
-CATALYST_INSTALLED=$(curl -k http://catalyst.localhost)
-if [[ "$CATALYST_INSTALLED" =~ "<html>" ]]; then
+CATALYST_INSTALLED=$(docker compose ls -q --filter name=catalyst-setup-sp24-main2)
+if [ -n "$CATALYST_INSTALLED" ]; then
 	echo -e "${green}[CATALYST SETUP]${none} Catalyst already running"
 else
-	echo -e "${yellow}[CATALYST SETUP]${none} INSTALLING CATALYST"
-
-	curl -sL https://raw.githubusercontent.com/sarcb/catalyst-setup-sp24/main/install_catalyst.sh -o install_catalyst.sh
-
-	openssl req -x509 -newkey rsa:4096 -sha256 -days 3650 -nodes -keyout example.key -out example.crt -subj "/CN=localhost"
-
-	#sed -i "s/docker compose/docker-compose/g" $CATALYST_SCRIPTS_PATH/install_catalyst.sh
-
-	sudo bash install_catalyst.sh https://catalyst.localhost https://authelia.localhost $CATALYST_SCRIPTS_PATH/example.crt $CATALYST_SCRIPTS_PATH/example.key admin:admin:admin@example.com
+    # verify that this is the first install to prevent arangodb root password issues
+    if [ -n "$(docker volume ls -q --filter name=catalyst-setup-sp24-main_arangodb)" ]; then
+        echo "ERROR: Catalyst seems to already be installed.  To start/stop it, use the following commands:"
+        echo "TO ${green}START${none}:"
+        echo "  docker compose -f /opt/catalyst/catalyst-setup-sp24-main/docker-compose.yml up --detach"
+        echo "TO ${red}STOP${none}:"
+        echo "  docker compose -f /opt/catalyst/catalyst-setup-sp24-main/docker-compose.yml down"
+        exit 1
+    else
+        echo -e "${yellow}[CATALYST SETUP]${none} INSTALLING CATALYST"
+        curl -sL https://raw.githubusercontent.com/sarcb/catalyst-setup-sp24/main/install_catalyst.sh -o install_catalyst.sh
+        openssl req -x509 -newkey rsa:4096 -sha256 -days 3650 -nodes -keyout example.key -out example.crt -subj "/CN=localhost"
+        sudo bash install_catalyst.sh https://catalyst.localhost https://authelia.localhost $CATALYST_INSTALL_PATH/example.crt $CATALYST_INSTALL_PATH/example.key admin:admin:admin@example.com
+    fi
 fi
 
 ### CLEANUP 
-if [[ $PWD != $CATALYST_SCRIPTS_PATH  ]]; then 
+if [[ $PWD != $CATALYST_INSTALL_PATH  ]]; then 
 	popd
 fi
 
