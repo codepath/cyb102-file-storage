@@ -77,6 +77,7 @@ if [ -n "$CATALYST_INSTALLED" ]; then
     echo -e "\n  ${bold}docker compose -f /opt/catalyst/catalyst-setup-sp24-main/docker-compose.yml down${none}\n"
     echo -e "To ${yellow}restart${none} it, use the following command:"
     echo -e "\n  ${bold}docker compose -f /opt/catalyst/catalyst-setup-sp24-main/docker-compose.yml up --detach${none}\n"
+    exit 0
 else
     # verify that this is the first install to prevent arangodb root password issues
     if [ -n "$(docker volume ls -q --filter name=catalyst-setup-sp24-main_arangodb)" ]; then
