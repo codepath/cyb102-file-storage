@@ -80,6 +80,15 @@ else
     echo -e "${green}[APACHE2]${none} Apache2 is already disabled."
 fi
 
+#### Check if nginx is running
+NGINX_ACTIVE=$(systemctl is-active nginx)
+if [[ "$NGINX_ACTIVE" == "active" ]]; then
+    echo -e "${yellow}[NGINX]${none} Stopping NGINX"
+    sudo service nginx stop
+else
+    echo -e "${green}[NGINX]${none} Nginx is already stopped."
+fi
+
 #### CATALYST LOCAL INSTALL: CATALYST
 CATALYST_INSTALLED=$(docker compose ls -q --filter name=catalyst-setup-sp24-main)
 if [ -n "$CATALYST_INSTALLED" ]; then
