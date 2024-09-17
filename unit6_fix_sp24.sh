@@ -9,13 +9,13 @@ bold='\033[1m'
 ############### REFERENCES ###############
 ##
 ## CATALYST LOCAL INSTALL:
-##	https://catalyst-soar.com/docs/catalyst/admin/install/#local-installation
+##  https://catalyst-soar.com/docs/catalyst/admin/install/#local-installation
 ##
 ## DOCKER COMPOSE STANDALONE 
-##	https://docs.docker.com/compose/install/standalone/
+##  https://docs.docker.com/compose/install/standalone/
 ##
 ## DOCKER 
-## 	https://github.com/fmidev/smartmet-server/blob/master/docs/Setting-up-Docker-and-Docker-Compose-(Ubuntu-16.04-and-18.04.1).md
+##  https://github.com/fmidev/smartmet-server/blob/master/docs/Setting-up-Docker-and-Docker-Compose-(Ubuntu-16.04-and-18.04.1).md
 ##
 ## Script developed by rollingcoconut and sarcb 
 ##########################################
@@ -48,26 +48,26 @@ fi
 #### DOCKER-COMPOSE INSTALL
 DOCKER_COMPOSE_INSTALLED=$(docker-compose --version)
 if [[ "$DOCKER_COMPOSE_INSTALLED" =~ "Docker Compose version" ]]; then
-	echo -e "${green}[DOCKER-COMPOSE SETUP]${none} docker-compose is already installed."
+    echo -e "${green}[DOCKER-COMPOSE SETUP]${none} docker-compose is already installed."
 else
-	echo -e "${yellow}[DOCKER-COMPOSE SETUP]${none} INSTALLING DOCKER-COMPOSE"
-	sudo curl -SL https://github.com/docker/compose/releases/download/v2.24.6/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
-	sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
-	sudo chmod +x /usr/local/bin/docker-compose
-	sudo /usr/local/bin/docker-compose
+    echo -e "${yellow}[DOCKER-COMPOSE SETUP]${none} INSTALLING DOCKER-COMPOSE"
+    sudo curl -SL https://github.com/docker/compose/releases/download/v2.24.6/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
+    sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+    sudo chmod +x /usr/local/bin/docker-compose
+    sudo /usr/local/bin/docker-compose
 fi
 
 #### CATALYST LOCAL INSTALL: DOCKER
 DOCKER_ACTIVE=$(systemctl is-active docker)
 if [[ "$DOCKER_ACTIVE" == "active" ]]; then
-	echo -e "${green}[DOCKER SETUP]${none} Docker is already installed."
+    echo -e "${green}[DOCKER SETUP]${none} Docker is already installed."
 else
-	echo -e "${yellow}[DOCKER SETUP]${none} INSTALLING DOCKER"
-	sudo curl --show-error --location https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-	sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-	sudo apt-get update
-	sudo apt-get install -y docker-ce
-	sudo usermod -aG docker ${USER}
+    echo -e "${yellow}[DOCKER SETUP]${none} INSTALLING DOCKER"
+    sudo curl --show-error --location https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+    sudo apt-get update
+    sudo apt-get install -y docker-ce
+    sudo usermod -aG docker ${USER}
 fi
 
 #### Check if apache2 is running
@@ -92,7 +92,7 @@ fi
 #### CATALYST LOCAL INSTALL: CATALYST
 CATALYST_INSTALLED=$(docker compose ls -q --filter name=catalyst-setup-sp24-main)
 if [ -n "$CATALYST_INSTALLED" ]; then
-	echo -e "${green}[CATALYST SETUP]${none} Catalyst is already running.  Try connecting at https://catalyst.localhost"
+    echo -e "${green}[CATALYST SETUP]${none} Catalyst is already running.  Try connecting at https://catalyst.localhost"
     echo -e "\nTo ${red}stop${none} it, use the following command:"
     echo -e "\n  ${bold}docker compose -f /opt/catalyst/catalyst-setup-sp24-main/docker-compose.yml down${none}\n"
     echo -e "To ${yellow}restart${none} it, use the following command:"
@@ -125,7 +125,7 @@ fi
 
 ### CLEANUP 
 if [[ $PWD != $CATALYST_INSTALL_PATH  ]]; then 
-	popd
+    popd
 fi
 
 
