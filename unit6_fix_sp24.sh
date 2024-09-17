@@ -28,6 +28,9 @@ if [ "$EUID" -ne 0 ]; then
     exit 1
 fi
 
+# Add Docker's official GPG key from the Ubuntu keyserver
+apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 7EA0A9C3F273FCD8
+
 # Installing unzip to ensure system won't crash
 if ! dpkg -s unzip > /dev/null; then
     echo "${red}[UNZIP]${none} Unzip not installed.  Installing now..."
