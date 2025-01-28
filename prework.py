@@ -180,6 +180,15 @@ def check_challenge_3():
 
 dramatic_print([f"Validating scripts.", ".", ". "])
 if validate():
+    try:
+        os.chmod("challenge_1.sh", 0o744)
+        os.chmod("challenge_2.sh", 0o744)
+        os.chmod("challenge_3.sh", 0o744)
+    except FileNotFoundError:
+        print("ERROR: One or more of your challenge scripts are missing.")
+        print("Please make sure you have not deleted any of the challenge scripts.")
+        print("\tTemplate: https://github.com/codepath/cyb102-prework-tmpl")
+        exit()
     print("Validated.")
 else:
     exit()
