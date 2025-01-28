@@ -108,12 +108,11 @@ def check_challenge_1():
         return True
     elif result == 2:
         print(f"🚧 Your command ran, but the contents of intro.txt don't seem to have changed.  Please check your command and try again.")
-        print(f"intro.txt still says:\n\t{new_content.decode()}\n")
         return False
     elif result == 4:
         print(f"🚧 Your command ran, but the file permissions for input changed when they shouldn't have.  Please check your command and try again.")
-        print(f"\tExpected permissions:\tintro.txt (644)")
-        print(f"\tActual permissions:\tintro.txt ({new_perms})\n")
+        print(f"\tOriginal permissions:\tpermanent.txt (644)")
+        print(f"\tYour permissions:\tpermanent.txt ({oct(os.stat('permanent.txt').st_mode)[-3:]})\n")
         return False
     else:
         print("⛔ Sorry, that's not the right answer. Please make sure your challenge_1 command modifies the file's content, but not its' permissions.\n")
