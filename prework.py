@@ -114,7 +114,7 @@ def check_challenge_1():
         print(f"\tYour permissions:\tpermanent.txt ({oct(os.stat('permanent.txt').st_mode)[-3:]})\n")
         return False
     else:
-        print("⛔ Sorry, that's not the right answer. Please make sure your challenge_1 command modifies the file's content, but not its' permissions. Error code: {result}\n")
+        print(f"⛔ Sorry, that's not the right answer. Please make sure your challenge_1 command modifies the file's content, but not its' permissions. Error code: {result}\n")
         return False
 
 
@@ -142,7 +142,7 @@ def check_challenge_2():
         print(f"🚧 Your command ran, but it seems like you accidentally modified the contents of permanent.txt.  Please check your command and try again.\n")
         return False
     else:
-        print("⛔ Sorry, that's not the right answer. Please make sure your challenge_2 command modifies the file's permissions, but not its' content. Error code: {result}\n")
+        print(f"⛔ Sorry, that's not the right answer. Please make sure your challenge_2 command modifies the file's permissions, but not its' content. Error code: {result}\n")
         return False
 
 def check_challenge_3():
@@ -158,7 +158,7 @@ def check_challenge_3():
     if result1 == 0:
         print(f"Done.")
     else:
-        print("⛔ Sorry, that's not the right answer. Please make sure your challenge_3 command does not modify the original random.txt file. Error code: {result1}")
+        print(f"⛔ Sorry, that's not the right answer. Please make sure your challenge_3 command does not modify the original random.txt file. Error code: {result1}")
         return False
 
     # Check if copy.txt has been created
