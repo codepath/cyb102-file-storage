@@ -1,7 +1,7 @@
 import hashlib, time, os, random, string
 from simple_term_menu import TerminalMenu
 
-SCRIPT_HASH = "d464563066dead6703d4f9e98327205848913cf4e338a05930c5330adfd85976"
+SCRIPT_HASH = "a90ca3281b6dca2155a26444dfb8e83ab81f7c9c0dbffe8c4b2b0f3a6c854648"
 
 def dramatic_print(strings):
     for string in strings:
@@ -178,12 +178,11 @@ def check_challenge_3():
         print(f"🚧 You're making progress!  Your command creates copy.txt, but its contents do not match random.txt. Please check your command and try again.\n")
         return False
 
-
-# dramatic_print([f"Validating scripts.", ".", ". "])
-# if validate():
-#     print("Validated.")
-# else:
-#     exit()
+dramatic_print([f"Validating scripts.", ".", ". "])
+if validate():
+    print("Validated.")
+else:
+    exit()
 
 print(f"Welcome to the CYB102 Prework!\n")
 print(f"To use this workspace, please follow the instructions at:")
