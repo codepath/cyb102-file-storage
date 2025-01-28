@@ -82,8 +82,6 @@ def check_file(filename, correct_hash=None, different_hash=None, correct_perms=N
     if different_hash and file_hash == different_hash:
         result += 2
     if correct_perms and file_perms != correct_perms:
-        print(file_perms, type(file_perms))
-        print(correct_perms, type(correct_perms))
         result += 4
     return result
 
