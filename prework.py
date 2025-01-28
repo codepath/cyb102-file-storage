@@ -75,7 +75,7 @@ def check_file(filename, correct_hash=None, different_hash=None, correct_perms=N
     with open(filename, 'rb') as file_reader:
         file_content = file_reader.read()
         file_hash = hashlib.sha256(file_content).hexdigest()
-        file_perms = oct(os.stat('intro.txt').st_mode)[-3:]
+        file_perms = oct(os.stat(filename).st_mode)[-3:]
 
     if correct_hash and file_hash != correct_hash:
         result += 1
@@ -101,7 +101,7 @@ def check_challenge_1():
     result = check_file('intro.txt', different_hash=original_hash, correct_perms="644")
     dramatic_print([f"Checking for changes to intro.txt.", ".", ". "])
     if result == 0:
-        print(f"✅ Correct!")
+        print(f"✅ Challenge 1 Complete!")
         with open('challenge_1.sh', 'r') as chal:
             print(f"Your command was:\n\t> {chal.read()}\n")
         return True
@@ -110,8 +110,8 @@ def check_challenge_1():
         return False
     elif result == 4:
         print(f"🚧 Your command ran, but the file permissions for input changed when they shouldn't have.  Please check your command and try again.")
-        print(f"\tOriginal permissions:\tpermanent.txt (644)")
-        print(f"\tYour permissions:\tpermanent.txt ({oct(os.stat('permanent.txt').st_mode)[-3:]})\n")
+        print(f"\tOriginal permissions:\intro.txt (644)")
+        print(f"\tYour permissions:\intro.txt ({oct(os.stat('intro.txt').st_mode)[-3:]})\n")
         return False
     else:
         print(f"⛔ Sorry, that's not the right answer. Please make sure your challenge_1 command modifies the file's content, but not its' permissions. Error code: {result}\n")
@@ -129,7 +129,7 @@ def check_challenge_2():
 
     dramatic_print([f"Checking for changes to permanent.txt.", ".", ". "])
     if result == 4 and not has_write:
-        print(f"✅ Correct!")
+        print(f"✅ Challenge 2 Complete!")
         with open('challenge_2.sh', 'r') as chal:
             print(f"Your command was:\n\t> {chal.read()}\n")
         return True
@@ -169,7 +169,7 @@ def check_challenge_3():
         print(f"⛔ Sorry, that's not the right answer.  Please make sure your command creates a new file called copy.txt\n")
         return False
     if result2 == 0:
-        print(f"✅ Correct!")
+        print(f"✅ Challenge 3 Complete!")
         with open('challenge_3.sh', 'r') as chal:
             print(f"Your command was:\n\t> {chal.read()}\n")
         return True
