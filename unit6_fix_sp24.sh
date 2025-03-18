@@ -48,30 +48,36 @@ if ! grep -q "catalyst.localhost" /etc/hosts; then
     echo "127.0.0.1 authelia.localhost" | sudo tee -a /etc/hosts
 fi
 
-#### DOCKER-COMPOSE INSTALL
+#### Check if Docker Compose is installed and uninstall it
 DOCKER_COMPOSE_INSTALLED=$(docker-compose --version)
 if [[ "$DOCKER_COMPOSE_INSTALLED" =~ "Docker Compose version" ]]; then
-    echo -e "${green}[DOCKER-COMPOSE SETUP]${none} docker-compose is already installed."
-else
-    echo -e "${yellow}[DOCKER-COMPOSE SETUP]${none} INSTALLING DOCKER-COMPOSE"
-    sudo curl -SL https://github.com/docker/compose/releases/download/v2.24.6/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
-    sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
-    sudo chmod +x /usr/local/bin/docker-compose
-    sudo /usr/local/bin/docker-compose
+    echo -e "${yellow}[DOCKER-COMPOSE UNINSTALL]${none} Removing existing Docker Compose installation..."
+    sudo rm -f /usr/local/bin/docker-compose
+    sudo rm -f /usr/bin/docker-compose
+    echo -e "${green}[DOCKER-COMPOSE UNINSTALL]${none} Existing Docker Compose removed."
 fi
+echo -e "${yellow}[DOCKER-COMPOSE SETUP]${none} INSTALLING DOCKER-COMPOSE"
+sudo curl -SL https://github.com/docker/compose/releases/download/v2.24.6/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
+sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+sudo /usr/local/bin/docker-compose
 
 #### CATALYST LOCAL INSTALL: DOCKER
 DOCKER_ACTIVE=$(systemctl is-active docker)
 if [[ "$DOCKER_ACTIVE" == "active" ]]; then
-    echo -e "${green}[DOCKER SETUP]${none} Docker is already installed."
-else
-    echo -e "${yellow}[DOCKER SETUP]${none} INSTALLING DOCKER"
-    sudo curl --show-error --location https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-    sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-    sudo apt-get update
-    sudo apt-get install -y docker-ce
-    sudo usermod -aG docker ${USER}
+    echo -e "${yellow}[DOCKER UNINSTALL]${none} Removing existing Docker installation..."
+    sudo apt-get remove -y docker docker-engine docker.io containerd runc docker-ce docker-ce-cli docker-ce-rootless-extras
+    sudo apt-get purge -y docker docker-engine docker.io containerd runc docker-ce docker-ce-cli docker-ce-rootless-extras
+    sudo apt-get autoremove -y
+    sudo rm -rf /var/lib/docker
+    echo -e "${green}[DOCKER UNINSTALL]${none} Existing Docker removed."
 fi
+echo -e "${yellow}[DOCKER SETUP]${none} INSTALLING DOCKER"
+sudo curl --show-error --location https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+sudo apt-get update
+sudo apt-get install -y docker-ce
+sudo usermod -aG docker ${USER}
 
 #### Check if apache2 is running
 APACHE2_ACTIVE=$(systemctl is-active apache2)
